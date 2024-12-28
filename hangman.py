@@ -306,7 +306,6 @@ def game():
             if all(pos is None for pos in xy):
                 print("You won!")
                 break
-
-
+                
 if __name__ == "__main__":
     game()
