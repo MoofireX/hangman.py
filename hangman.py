@@ -9,6 +9,7 @@ t = turtle.Turtle()
 body_count = 0
 
 draw_pos = (-100.00,50.00)
+            
 
 def file(name=None):
     if name == None:
@@ -226,13 +227,32 @@ def game():
 
             if all(pos is None for pos in xy):
                 print("p2 won!")
-                break
+                print("The word was: ", word)
+                time.sleep(1)
+                win = False
 
             if turn == 0:
                 print("p1's turn")
-                guess = input("Guess a letter: ")
+                guess = input("If you want to guess the entire word, enter 'entire'. If not, Guess a letter: ")
 
-                if guess in word:
+                if guess == "entire":
+                    final = input("Okay smart guy, guess the word: ")
+
+                    if final == word:
+                        print("Great!")
+                        print("p1 won!")
+                        print("The word was: ", word)
+                        time.sleep(1)
+                        win = False
+                    
+                    else:
+                        print("You led yourself to your own gruesome death.")
+                        print("p2 wins!")
+                        print("The word was: ", word)
+                        time.sleep(1)
+                        win = False
+
+                elif guess in word:
 
                     indices = [ i for i, letter in enumerate(word) if letter == guess]
 
@@ -256,8 +276,9 @@ def game():
                     print("Nonexistent")
                     
                     if body_count == 6:
-                        time.sleep(1)
                         print("You caused the death of us all!! Including yourself of course.")
+                        print("The word was: ", word)
+                        time.sleep(1)
                         win = False                     
 
                     else:
@@ -266,14 +287,32 @@ def game():
 
             elif all(pos is None for pos in xy):
                 print("p1 won!")
-                break
+                print("The word was: ", word)
+                time.sleep(1)
+                win = False
 
 
             elif turn == 1:
                 print("p2's turn")
-                guess = input("Guess a letter: ")
+                guess = input("If you want to guess the entire word, enter 'entire'. If not, Guess a letter: ")
 
-                if guess in word:
+                if guess == "entire":
+                    final = input("Okay smart guy, guess the word: ")
+
+                    if final == word:
+                        print("Great!")
+                        print("p2 won!")
+                        print("The word was: ", word)
+                        time.sleep(1)
+                        win = False
+                    else:
+                        print("You led yourself to your own gruesome death.")
+                        print("p1 wins!")
+                        print("The word was: ", word)
+                        time.sleep(1)
+                        win = False
+
+                elif guess in word:
                     indices = [ i for i, letter in enumerate(word) if letter == guess]
 
                     for indx in indices:
@@ -298,6 +337,7 @@ def game():
                     if body_count == 6:
                         time.sleep(1)
                         print("You caused the death of us all!! Including yourself of course.")
+                        print("The word was: ", word)
                         win = False
 
                     else:
@@ -306,7 +346,9 @@ def game():
 
             elif all(pos is None for pos in xy):
                 print("p2 won!")
-                break
+                print("The word was: ", word)
+                time.sleep(1)
+                win = False
                     
             
     else:
@@ -316,11 +358,28 @@ def game():
 
             if all(pos is None for pos in xy):
                 print("You won!")
-                break
+                print("The word was: ", word)
+                time.sleep(1)
+                win = False
 
-            guess = input("Guess a letter: ")
+            guess = input("If you want to guess the entire word, enter 'entire'. If not, Guess a letter: ")
 
-            if guess in word_p1:
+            if guess == "entire":
+                final = input("Okay Smart guy, guess the entire word: ")
+
+                if final == word:
+                    print("Great!")
+                    print("You won!")
+                    print("The word was: ", word)
+                    time.sleep(1)
+                    win = False
+
+                else:
+                    print("You died. Mwahaha!")
+                    print("The word was: ", word)
+                    win = False
+
+            elif guess in word_p1:
                 indices = [i for i, letter in enumerate(word) if letter == guess]
 
                 for indx in indices:
@@ -342,8 +401,9 @@ def game():
                 print("Nonexistent")
 
                 if body_count == 6:
-                    time.sleep(1)
                     print("You've been hanged!")
+                    print("The word was: ", word)
+                    time.sleep(1)
                     win = False
 
                 else:
@@ -351,7 +411,9 @@ def game():
 
             if all(pos is None for pos in xy):
                 print("You won!")
-                break
+                print("The word was: ", word)
+                time.sleep(1)
+                wine = False
 
 if __name__ == "__main__":
     game()
