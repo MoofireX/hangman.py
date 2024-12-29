@@ -129,43 +129,74 @@ def draw_bodyparts(part):
 
 
 def game():
-    global xy,word,body_count, draw_pos, draw
+    global xy,word,body_count, draw_pos
 
     turn = 0
     win = None
     guess = ""
+    ask_random = ""
 
     print("This can be a 1-player or a 2-player game. 2-player mode needs a seperate word decider who doesn't play. That word decider will enter the word into the computer next.")
 
     porpp = input("Are you playing as a single player or as 2 players? Enter 1 for 1 player or 2 for 2 players: ")
 
     if porpp == "2":
-        word = draw_init(input("What is the word? Shield this from the players: "))
+        ask_random = input("Would you guys like a word from a file, or do you prefer another person entering the word? Enter file for option 1 and other for option 2. ")
 
-        t.forward(350)
-        t.left(90)
-        t.backward(150)
-        t.pendown()
-    
-        letters = list(word)
-        xy = []
+        if ask_random == "other":
+            word = draw_init(input("What is the word? Shield this from the players: "))
 
-        for x in range(len(letters)):
-            t.forward(25)
-            xy.append(t.pos())
-            t.forward(25)
-            t.penup()
-            t.forward(25)
+            t.forward(350)
+            t.left(90)
+            t.backward(150)
             t.pendown()
     
+            letters = list(word)
+            xy = []
+
+            for x in range(len(letters)):
+                t.forward(25)
+                xy.append(t.pos())
+                t.forward(25)
+                t.penup()
+                t.forward(25)
+                t.pendown()
+        else:
+            ask_file = input('What file would you like to use? ')
+            if ask_file == "None":
+                word_list = file()
+            else:
+                word_list = file(ask_file)
+
+            input_word_indx = random.randint(0,len(word_list) - 1)
+            word_p1 = word_list[input_word_indx]
+
+            word = draw_init(word_p1)
+        
+            t.forward(350)
+            t.left(90)
+            t.backward(150)
+            t.pendown()
+    
+            letters = list(word)
+            xy = []
+
+            for x in range(len(letters) - 1):
+                t.forward(25)
+                xy.append(t.pos())
+                t.forward(25)
+                t.penup()
+                t.forward(25)
+                t.pendown()
+    
     else:
-        draw = 0
+
         print("For 1-player mode, the computer will generate a random word from the file of choosing. Please enter a file name for a customized word list, or enter 'None' to use the default file. The file is on the Github repository.")
-        ask = input('What file would you like to use? ')
-        if ask == "None":
+        ask_file = input('What file would you like to use? ')
+        if ask_file == "None":
             word_list = file()
         else:
-            word_list = file(ask)
+            word_list = file(ask_file)
 
         input_word_indx = random.randint(0,len(word_list) - 1)
         word_p1 = word_list[input_word_indx]
@@ -202,21 +233,27 @@ def game():
                 guess = input("Guess a letter: ")
 
                 if guess in word:
-                    indx = word.index(guess)
-                    t.penup()
-                    t.goto(xy[indx])
-                    for val in xy:
-                        if xy[indx] is None:
-                            indx -= 1
-                    xy[indx] = None
-                    t.pendown()
-                    t.write(guess,font=("Arial",36,"normal"))
+
+                    indices = [ i for i, letter in enumerate(word) if letter == guess]
+
+                    for indx in indices:
+                        if xy[indx] is not None:
+                            t.penup()
+                            t.goto(xy[indx])
+                            for val in xy:
+                                if xy[indx] is None:
+                                    indx -= 1
+                            xy[indx] = None
+                        
+                        t.pendown()
+                        t.write(guess,font=("Arial",36,"normal"))
                     turn = 1
                 else:
                     t.penup()
                     t.goto(draw_pos)
                     t.pendown()
                     draw_bodyparts(body_count)
+                    print("Nonexistent")
                     
                     if body_count == 6:
                         time.sleep(1)
@@ -237,22 +274,26 @@ def game():
                 guess = input("Guess a letter: ")
 
                 if guess in word:
-                    indx = word.index(guess)
-                    t.penup()
-                    t.goto(xy[indx])
-                    xy[indx] = None
-                    for val in xy:
-                        if xy[indx] is None:
-                            indx -= 1
+                    indices = [ i for i, letter in enumerate(word) if letter == guess]
+
+                    for indx in indices:
+                        if xy[indx] is not None:
+                            t.penup()
+                            t.goto(xy[indx])
+                            for val in xy:
+                                if xy[indx] is None:
+                                    indx -= 1
+                            xy[indx] = None
         
-                    t.pendown()
-                    t.write(guess,font=("Arial",36,"normal"))
+                        t.pendown()
+                        t.write(guess,font=("Arial",36,"normal"))
                     turn = 0
                 else:
                     t.penup()
                     t.goto(draw_pos)
                     t.pendown()
                     draw_bodyparts(body_count)
+                    print("Nonexistent")
                     
                     if body_count == 6:
                         time.sleep(1)
@@ -280,21 +321,26 @@ def game():
             guess = input("Guess a letter: ")
 
             if guess in word_p1:
-                indx = word.index(guess)
-                t.penup()
-                t.goto(xy[indx])
-                for val in xy:
-                    if xy[indx] is None:
-                        indx -= 1
-                xy[indx] = None
-                t.pendown()
-                t.write(guess,font=("Arial",36,"normal"))
+                indices = [i for i, letter in enumerate(word) if letter == guess]
+
+                for indx in indices:
+                    if xy[indx] is not None:
+                        t.penup()
+                        t.goto(xy[indx])
+                        for val in xy:
+                            if xy[indx] is None:
+                                indx -= 1
+                        xy[indx] = None
+                        t.pendown()
+                        t.write(guess,font=("Arial",36,"normal"))
                 turn = 1
             else:
                 t.penup()
                 t.goto(draw_pos)
                 t.pendown()
                 draw_bodyparts(body_count)
+                print("Nonexistent")
+
                 if body_count == 6:
                     time.sleep(1)
                     print("You've been hanged!")
@@ -306,6 +352,6 @@ def game():
             if all(pos is None for pos in xy):
                 print("You won!")
                 break
-                
+
 if __name__ == "__main__":
     game()
