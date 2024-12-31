@@ -13,7 +13,7 @@ draw_pos = (-100.00,50.00)
 
 def file(name=None):
     if name == None:
-        words = open("/home/moofire/Desktop/Python/hangman_words.txt",'r')
+        words = open("hangman_words.txt",'r')
         word_list = list(words)
     
     else:
@@ -170,9 +170,9 @@ def game():
                 word_list = file(ask_file)
 
             input_word_indx = random.randint(0,len(word_list) - 1)
-            word_p1 = word_list[input_word_indx]
+            word = word_list[input_word_indx]
 
-            word = draw_init(word_p1)
+            word = draw_init(word)
         
             t.forward(350)
             t.left(90)
@@ -202,14 +202,14 @@ def game():
         input_word_indx = random.randint(0,len(word_list) - 1)
         word_p1 = word_list[input_word_indx]
 
-        word = draw_init(word_p1)
+        word_p1 = draw_init(word_p1)
         
         t.forward(350)
         t.left(90)
         t.backward(150)
         t.pendown()
     
-        letters = list(word)
+        letters = list(word_p1)
         xy = []
 
         for x in range(len(letters) - 1):
@@ -238,7 +238,7 @@ def game():
                 if guess == "entire":
                     final = input("Okay smart guy, guess the word: ")
 
-                    if final == word:
+                    if final.strip().lower() == word.strip().lower():
                         print("Great!")
                         print("p1 won!")
                         print("The word was: ", word)
@@ -299,7 +299,7 @@ def game():
                 if guess == "entire":
                     final = input("Okay smart guy, guess the word: ")
 
-                    if final == word:
+                    if final.strip().lower() == word.strip().lower():
                         print("Great!")
                         print("p2 won!")
                         print("The word was: ", word)
@@ -358,7 +358,7 @@ def game():
 
             if all(pos is None for pos in xy):
                 print("You won!")
-                print("The word was: ", word)
+                print("The word was: ", word_p1)
                 time.sleep(1)
                 win = False
 
@@ -366,21 +366,24 @@ def game():
 
             if guess == "entire":
                 final = input("Okay Smart guy, guess the entire word: ")
+                print(final == word_p1)
+                print(final)
+                print(word_p1)
 
-                if final == word:
+                if final.strip().lower() == word_p1.strip().lower():
                     print("Great!")
                     print("You won!")
-                    print("The word was: ", word)
+                    print("The word was: ", word_p1)
                     time.sleep(1)
                     win = False
 
                 else:
                     print("You died. Mwahaha!")
-                    print("The word was: ", word)
+                    print("The word was: ", word_p1)
                     win = False
 
             elif guess in word_p1:
-                indices = [i for i, letter in enumerate(word) if letter == guess]
+                indices = [i for i, letter in enumerate(word_p1) if letter == guess]
 
                 for indx in indices:
                     if xy[indx] is not None:
@@ -402,7 +405,7 @@ def game():
 
                 if body_count == 6:
                     print("You've been hanged!")
-                    print("The word was: ", word)
+                    print("The word was: ", word_p1)
                     time.sleep(1)
                     win = False
 
@@ -411,9 +414,9 @@ def game():
 
             if all(pos is None for pos in xy):
                 print("You won!")
-                print("The word was: ", word)
+                print("The word was: ", word_p1)
                 time.sleep(1)
-                wine = False
+                win = False
 
 if __name__ == "__main__":
     game()
